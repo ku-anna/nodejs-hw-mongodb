@@ -3,7 +3,7 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
-import { getAllContacts, getContactById } from './services/contacts';
+import { getAllContacts, getContactById } from './services/contacts.js';
 
 const PORT = process.env.PORT || 3000;
 
