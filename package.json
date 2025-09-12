@@ -21,6 +21,7 @@
   "homepage": "https://github.com/ku-anna/nodejs-hw-mongodb#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "eslint": "^9.35.0",
     "express": "^5.1.0",
     "mongoose": "^8.18.1",
