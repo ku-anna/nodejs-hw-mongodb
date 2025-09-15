@@ -14,29 +14,24 @@ export const setupServer = () => {
   app.use(express.json());
   app.use(cors());
 
+  //contacts
   app.get('/contacts', async (req, res) => {
-    const contacts = await getAllContacts();
-
-    res.status(200).json({
-      data: contacts,
-    });
+    const result = await getAllContacts();
+    res.status(result.status).json(result);
   });
 
-  app.get('/contacts/:contactId', async (req, res, next) => {
+  // contactId
+  app.get('/contacts/:contactId', async (req, res) => {
     const { contactId } = req.params;
-    const contact = await getContactById(contactId);
+    const result = await getContactById(contactId);
 
-    if (!contact) {
-      res.status(404).json({
+    if (!result) {
+      return res.status(404).json({
         message: 'Contact not found',
       });
-      return;
     }
 
-    res.status(200).json({
-      message: `The contact with id ${contactId} was found`,
-      data: contact,
-    });
+    res.status(result.status).json(result);
   });
 
   app.use(
