@@ -34,6 +34,7 @@ export const setupServer = () => {
     res.status(result.status).json(result);
   });
 
+  // logging
   app.use(
     pino({
       transport: {
@@ -41,13 +42,13 @@ export const setupServer = () => {
       },
     }),
   );
-
+  //404
   app.use((req, res) => {
     res.status(404).json({
       message: 'Not found',
     });
   });
-
+  //error
   app.use((err, req, res, next) => {
     res.status(500).json({
       message: 'Something went wrong',

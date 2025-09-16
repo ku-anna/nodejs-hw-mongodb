@@ -1,12 +1,12 @@
 import { ContactsCollection } from '../models/contacts.js';
 
 export const getAllContacts = async () => {
-  const contacts = await ContactsCollection.find();
+  const data = await ContactsCollection.find();
 
   return {
     status: 200,
     message: 'Successfully found contacts!',
-    contacts,
+    data,
   };
 };
 
@@ -20,6 +20,6 @@ export const getContactById = async (contactId) => {
   return {
     status: 200,
     message: `Successfully found contact with id ${contactId}!`,
-    contact,
+    data: contact,
   };
 };
