@@ -23,3 +23,13 @@ export const getContactById = async (contactId) => {
     data: contact,
   };
 };
+
+export const createContact = async (payload) => {
+  const newContact = await ContactsCollection.create(payload);
+
+  return {
+    status: 201,
+    message: 'Successfully created a contact!',
+    data: newContact,
+  };
+};
