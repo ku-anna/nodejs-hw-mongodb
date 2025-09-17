@@ -24,6 +24,8 @@ export const getContactById = async (contactId) => {
   };
 };
 
+//PUT
+
 export const createContact = async (payload) => {
   const newContact = await ContactsCollection.create(payload);
 
@@ -32,4 +34,36 @@ export const createContact = async (payload) => {
     message: 'Successfully created a contact!',
     data: newContact,
   };
+};
+
+// PATCH
+
+export const updateContact = async (contactId, payload) => {
+  const updatedContact = await ContactsCollection.findByIdAndUpdate(
+    contactId,
+    payload,
+    { new: true },
+  );
+
+  if (!updatedContact) {
+    return null;
+  }
+
+  return {
+    status: 200,
+    message: 'Successfully patched a contact!',
+    data: updatedContact,
+  };
+};
+
+// DELETE
+
+export const deleteContact = async (contactId) => {
+  const deletedContact = await ContactsCollection.findByIdAndDelete(contactId);
+
+  if (!deletedContact) {
+    return null;
+  }
+
+  return true;
 };
