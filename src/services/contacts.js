@@ -7,16 +7,26 @@ export const getAllContacts = async ({
   perPage = 10,
   sortOrder = SORT_ORDER.ASC,
   sortBy = '_id',
+  type,
+  isFavourite,
 }) => {
   const skip = (page - 1) * perPage;
 
+  const filter = {};
+  if (type) {
+    filter.contactType = type;
+  }
+  if (typeof isFavourite !== 'undefined') {
+    filter.isFavourite = isFavourite === 'true' || isFavourite === true;
+  }
+
   const [contacts, totalItems] = await Promise.all([
-    ContactsCollection.find()
+    ContactsCollection.find(filter)
       .skip(skip)
       .limit(perPage)
       .sort({ [sortBy]: sortOrder })
       .exec(),
-    ContactsCollection.countDocuments(),
+    ContactsCollection.countDocuments(filter),
   ]);
 
   const totalPages = Math.ceil(totalItems / perPage);

@@ -14,6 +14,8 @@ export const getContactsController = async (req, res) => {
     perPage = 10,
     sortBy = '_id',
     sortOrder = 'asc',
+    type,
+    isFavourite,
   } = req.query;
 
   const result = await getAllContacts({
@@ -21,6 +23,8 @@ export const getContactsController = async (req, res) => {
     perPage: Number(perPage),
     sortBy,
     sortOrder: sortOrder.toLowerCase() === 'desc' ? -1 : 1,
+    type,
+    isFavourite,
   });
 
   res.status(200).json({
