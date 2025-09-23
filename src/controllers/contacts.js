@@ -7,13 +7,13 @@ import {
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
 
-// controller - all contacts
+// GET - all contacts
 export const getContactsController = async (req, res) => {
   const result = await getAllContacts();
   res.status(result.status).json(result);
 };
 
-// controller - contact by id
+// GET by id
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const result = await getContactById(contactId);
@@ -58,4 +58,31 @@ export const deleteContactController = async (req, res) => {
     throw createHttpError(404, 'Contact not found');
   }
   res.status(204).send();
+};
+
+//upsert
+export const upsertContactController = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+
+    const result = await updateContact(contactId, req.body, {
+      upsert: true,
+    });
+
+    if (!result) {
+      return next(createHttpError(404, 'Contact not found'));
+    }
+
+    const status = result.isNew ? 201 : 200;
+
+    res.status(status).json({
+      status,
+      message: result.isNew
+        ? 'Successfully created a new contact!'
+        : 'Successfully updated the contact!',
+      data: result.contact,
+    });
+  } catch (err) {
+    next(err);
+  }
 };

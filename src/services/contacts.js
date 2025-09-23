@@ -36,23 +36,23 @@ export const createContact = async (payload) => {
   };
 };
 
-// PATCH
-
-export const updateContact = async (contactId, payload) => {
-  const updatedContact = await ContactsCollection.findByIdAndUpdate(
-    contactId,
+// update/insert
+export const updateContact = async (contactId, payload, options = {}) => {
+  const rawResult = await ContactsCollection.findOneAndUpdate(
+    { _id: contactId },
     payload,
-    { new: true },
+    {
+      new: true,
+      includeResultMetadata: true,
+      ...options,
+    },
   );
 
-  if (!updatedContact) {
-    return null;
-  }
+  if (!rawResult || !rawResult.value) return null;
 
   return {
-    status: 200,
-    message: 'Successfully patched a contact!',
-    data: updatedContact,
+    contact: rawResult.value,
+    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
   };
 };
 
