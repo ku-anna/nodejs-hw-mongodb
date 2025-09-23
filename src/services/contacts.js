@@ -1,30 +1,38 @@
 import { ContactsCollection } from '../models/contacts.js';
+import { SORT_ORDER } from '../constants/index.js';
 
-export const getAllContacts = async ({ page = 1, perPage = 10 }) => {
+// GET all + pagination + sorting
+export const getAllContacts = async ({
+  page = 1,
+  perPage = 10,
+  sortOrder = SORT_ORDER.ASC,
+  sortBy = '_id',
+}) => {
   const skip = (page - 1) * perPage;
 
   const [contacts, totalItems] = await Promise.all([
-    ContactsCollection.find().skip(skip).limit(perPage),
+    ContactsCollection.find()
+      .skip(skip)
+      .limit(perPage)
+      .sort({ [sortBy]: sortOrder })
+      .exec(),
     ContactsCollection.countDocuments(),
   ]);
 
   const totalPages = Math.ceil(totalItems / perPage);
 
   return {
-    status: 200,
-    message: 'Successfully found contacts!',
-    data: {
-      data: contacts,
-      page,
-      perPage,
-      totalItems,
-      totalPages,
-      hasPreviousPage: page > 1,
-      hasNextPage: page < totalPages,
-    },
+    data: contacts,
+    page,
+    perPage,
+    totalItems,
+    totalPages,
+    hasPreviousPage: page > 1,
+    hasNextPage: page < totalPages,
   };
 };
 
+// GET by id
 export const getContactById = async (contactId) => {
   const contact = await ContactsCollection.findById(contactId);
 
