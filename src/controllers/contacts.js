@@ -6,13 +6,16 @@ import {
   deleteContact,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
-// GET - all contacts
+//GET all + pagination
 export const getContactsController = async (req, res) => {
-  const result = await getAllContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+
+  const result = await getAllContacts({ page, perPage });
+
   res.status(result.status).json(result);
 };
-
 // GET by id
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;

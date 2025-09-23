@@ -1,12 +1,27 @@
 import { ContactsCollection } from '../models/contacts.js';
 
-export const getAllContacts = async () => {
-  const data = await ContactsCollection.find();
+export const getAllContacts = async ({ page = 1, perPage = 10 }) => {
+  const skip = (page - 1) * perPage;
+
+  const [contacts, totalItems] = await Promise.all([
+    ContactsCollection.find().skip(skip).limit(perPage),
+    ContactsCollection.countDocuments(),
+  ]);
+
+  const totalPages = Math.ceil(totalItems / perPage);
 
   return {
     status: 200,
     message: 'Successfully found contacts!',
-    data,
+    data: {
+      data: contacts,
+      page,
+      perPage,
+      totalItems,
+      totalPages,
+      hasPreviousPage: page > 1,
+      hasNextPage: page < totalPages,
+    },
   };
 };
 
