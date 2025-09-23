@@ -1,7 +1,7 @@
 import { ContactsCollection } from '../models/contacts.js';
 import { SORT_ORDER } from '../constants/index.js';
 
-// GET all + pagination + sorting
+// GET all + pagination + sorting + filters
 export const getAllContacts = async ({
   page = 1,
   perPage = 10,
@@ -10,32 +10,37 @@ export const getAllContacts = async ({
   type,
   isFavourite,
 }) => {
+  const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const filter = {};
+  const contactsQuery = ContactsCollection.find();
+
   if (type) {
-    filter.contactType = type;
+    contactsQuery.where('contactType').equals(type);
   }
+
   if (typeof isFavourite !== 'undefined') {
-    filter.isFavourite = isFavourite === 'true' || isFavourite === true;
+    const fav = isFavourite === 'true' || isFavourite === true;
+    contactsQuery.where('isFavourite').equals(fav);
   }
 
-  const [contacts, totalItems] = await Promise.all([
-    ContactsCollection.find(filter)
-      .skip(skip)
-      .limit(perPage)
-      .sort({ [sortBy]: sortOrder })
-      .exec(),
-    ContactsCollection.countDocuments(filter),
-  ]);
+  const contactsCount = await ContactsCollection.find()
+    .merge(contactsQuery)
+    .countDocuments();
 
-  const totalPages = Math.ceil(totalItems / perPage);
+  const contacts = await contactsQuery
+    .skip(skip)
+    .limit(limit)
+    .sort({ [sortBy]: sortOrder })
+    .exec();
+
+  const totalPages = Math.ceil(contactsCount / perPage);
 
   return {
     data: contacts,
     page,
     perPage,
-    totalItems,
+    totalItems: contactsCount,
     totalPages,
     hasPreviousPage: page > 1,
     hasNextPage: page < totalPages,
