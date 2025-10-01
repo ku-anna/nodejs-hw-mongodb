@@ -1,5 +1,33 @@
 import { ContactsCollection } from '../models/contacts.js';
 import { SORT_ORDER } from '../constants/index.js';
+import bcrypt from 'bcrypt';
+import createHttpError from 'http-errors';
+import { User } from '../models/User.js';
+
+const SALT_ROUNDS = 10;
+
+export const registerUser = async ({ name, email, password }) => {
+  const existing = await User.findOne({ email });
+  if (existing) {
+    throw createHttpError(409, 'Email in use');
+  }
+
+  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+
+  const newUser = await User.create({
+    name,
+    email,
+    password: passwordHash,
+  });
+
+  return {
+    id: newUser._id,
+    name: newUser.name,
+    email: newUser.email,
+    createdAt: newUser.createdAt,
+    updatedAt: newUser.updatedAt,
+  };
+};
 
 // GET all + pagination + sorting + filters
 export const getAllContacts = async ({

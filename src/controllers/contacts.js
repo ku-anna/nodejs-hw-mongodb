@@ -6,6 +6,7 @@ import {
   deleteContact,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import { registerUser } from '../services/auth.js';
 
 //GET all + pagination
 export const getContactsController = async (req, res) => {
@@ -110,4 +111,15 @@ export const upsertContactController = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+// Register user
+export const registerUserController = async (req, res) => {
+  const user = await registerUser(req.body);
+
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully registered a user!',
+    data: user,
+  });
 };
