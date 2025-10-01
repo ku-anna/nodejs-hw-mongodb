@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser';
 
 import contactsRouter from './routers/contacts.js';
 import authRouter from './routers/auth.js';
-import router from './routers/index.js';
 
 import { getEnvVar } from './utils/getEnvVar.js';
 import { errorHandler } from './middlewares/errorHandler.js';
@@ -45,8 +44,6 @@ export const setupServer = () => {
 
   app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);
-
-  app.use(router);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
