@@ -2,7 +2,7 @@ import { ContactsCollection } from '../models/contacts.js';
 import { SORT_ORDER } from '../constants/index.js';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
-import { User } from '../models/User.js';
+import { User } from './models/user.js';
 
 const SALT_ROUNDS = 10;
 
