@@ -12,16 +12,21 @@ import { refreshUserSessionController } from '../controllers/auth.js';
 
 const router = Router();
 
+//auth reg
 router.post(
   '/register',
   validateBody(registerUserSchema),
   ctrlWrapper(registerUserController),
 );
+
+//auth login
 router.post(
   '/login',
   validateBody(loginUserSchema),
   ctrlWrapper(loginUserController),
 );
+
+//auth logout
 router.post('/logout', ctrlWrapper(logoutUserController));
 
 router.post('/refresh', ctrlWrapper(refreshUserSessionController));

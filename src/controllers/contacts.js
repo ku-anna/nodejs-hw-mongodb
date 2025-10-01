@@ -6,7 +6,7 @@ import {
   deleteContact,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
-import { registerUser } from '../services/auth.js';
+import { registerUser, loginUser } from '../services/auth.js';
 
 //GET all + pagination
 export const getContactsController = async (req, res) => {
@@ -113,7 +113,7 @@ export const upsertContactController = async (req, res, next) => {
   }
 };
 
-// Register user
+// user reg
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
 
@@ -121,5 +121,25 @@ export const registerUserController = async (req, res) => {
     status: 201,
     message: 'Successfully registered a user!',
     data: user,
+  });
+};
+
+// user login
+export const loginUserController = async (req, res) => {
+  const session = await loginUser(req.body);
+
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully logged in an user!',
+    data: { accessToken: session.accessToken },
   });
 };
