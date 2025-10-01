@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 
 import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
-import { SessionsCollection } from '../db/models/session.js';
-import { UsersCollection } from '../db/models/user.js';
+import { SessionsCollection } from '../models/session.js';
+import { UsersCollection } from '../models/user.js';
 
 export const registerUser = async (payload) => {
   const existing = await UsersCollection.findOne({ email: payload.email });
