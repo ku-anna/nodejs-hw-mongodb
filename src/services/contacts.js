@@ -2,19 +2,19 @@ import { ContactsCollection } from '../models/contacts.js';
 import { SORT_ORDER } from '../constants/index.js';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
-import { User } from '../models/user.js';
+import { UsersCollection } from '../models/user.js';
 
 const SALT_ROUNDS = 10;
 
 export const registerUser = async ({ name, email, password }) => {
-  const existing = await User.findOne({ email });
+  const existing = await UsersCollection.findOne({ email });
   if (existing) {
     throw createHttpError(409, 'Email in use');
   }
 
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
-  const newUser = await User.create({
+  const newUser = await UsersCollection.create({
     name,
     email,
     password: passwordHash,
