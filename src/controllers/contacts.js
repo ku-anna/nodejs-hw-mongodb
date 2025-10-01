@@ -55,8 +55,18 @@ export const createContactController = async (req, res) => {
     throw createHttpError(400, 'Missing required fields');
   }
 
-  const result = await createContact(req.body);
-  res.status(result.status).json(result);
+  const contactData = {
+    ...req.body,
+    userId: req.user.id,
+  };
+
+  const contact = await createContact(contactData);
+
+  res.status(201).json({
+    status: 201,
+    message: 'Contact created successfully',
+    data: contact,
+  });
 };
 
 // PATCH controller
