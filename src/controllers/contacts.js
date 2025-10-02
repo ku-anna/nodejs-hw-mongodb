@@ -19,7 +19,10 @@ export const getContactsController = async (req, res) => {
     isFavourite,
   } = req.query;
 
+  const userId = req.user._id;
+
   const result = await getAllContacts({
+    userId,
     page: Number(page),
     perPage: Number(perPage),
     sortBy,
@@ -57,7 +60,7 @@ export const createContactController = async (req, res) => {
 
   const contactData = {
     ...req.body,
-    userId: req.user.id,
+    userId: req.user._id,
   };
 
   const contact = await createContact(contactData);
@@ -72,16 +75,18 @@ export const createContactController = async (req, res) => {
 // PATCH controller
 export const updateContactController = async (req, res) => {
   const { contactId } = req.params;
-  const result = await updateContact(contactId, req.body);
+  const userId = req.user._id;
+  const payload = req.body;
 
-  if (!result) {
+  const updatedContact = await updateContact(userId, contactId, payload);
+  if (!updatedContact) {
     throw createHttpError(404, 'Contact not found');
   }
 
   res.status(200).json({
     status: 200,
     message: 'Successfully patched a contact!',
-    data: result.contact,
+    data: updatedContact,
   });
 };
 

@@ -93,13 +93,13 @@ export const getContactById = async (userId, contactId) => {
 
 //create
 export const createContact = async (payload) => {
-  const newContact = await ContactsCollection.create(payload);
+  return await ContactsCollection.create(payload);
 
-  return {
-    status: 201,
-    message: 'Successfully created a contact!',
-    data: newContact,
-  };
+  // return {
+  //   status: 201,
+  //   message: 'Successfully created a contact!',
+  //   data: newContact,
+  // };
 };
 
 // upsert
