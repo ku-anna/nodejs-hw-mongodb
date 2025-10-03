@@ -103,28 +103,12 @@ export const createContact = async (payload) => {
 };
 
 // upsert
-export const updateContact = async (
-  userId,
-  contactId,
-  payload,
-  options = {},
-) => {
-  const rawResult = await ContactsCollection.findOneAndUpdate(
+export const updateContact = async (userId, contactId, payload) => {
+  return await ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
     payload,
-    {
-      new: true,
-      includeResultMetadata: true,
-      ...options,
-    },
+    { new: true },
   );
-
-  if (!rawResult || !rawResult.value) return null;
-
-  return {
-    contact: rawResult.value,
-    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
-  };
 };
 
 //delete
@@ -134,9 +118,5 @@ export const deleteContact = async (userId, contactId) => {
     userId,
   });
 
-  if (!deletedContact) {
-    return null;
-  }
-
-  return true;
+  return deletedContact;
 };
