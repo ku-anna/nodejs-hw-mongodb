@@ -95,16 +95,13 @@ export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
   const userId = req.user._id;
 
-  const deleted = await deleteContact(userId, contactId);
+  const deleted = await deleteContact({ userId, contactId });
 
   if (!deleted) {
     throw createHttpError(404, `Contact with id ${contactId} does not exist`);
   }
 
-  res.status(200).json({
-    status: 200,
-    message: `Contact with id ${contactId} was successfully deleted`,
-  });
+  res.sendStatus(200);
 };
 
 //upsert
