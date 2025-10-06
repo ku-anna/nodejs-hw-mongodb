@@ -6,7 +6,6 @@ import {
   deleteContact,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
-import { registerUser, loginUser } from '../services/auth.js';
 
 //GET all + pagination
 export const getContactsController = async (req, res) => {
@@ -101,7 +100,7 @@ export const deleteContactController = async (req, res) => {
     throw createHttpError(404, `Contact with id ${contactId} does not exist`);
   }
 
-  res.sendStatus(200);
+  res.sendStatus(204);
 };
 
 //upsert
@@ -129,35 +128,4 @@ export const upsertContactController = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
-
-// user reg
-export const registerUserController = async (req, res) => {
-  const user = await registerUser(req.body);
-
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully registered a user!',
-    data: user,
-  });
-};
-
-// user login
-export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
-
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: session.refreshTokenValidUntil,
-  });
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: session.refreshTokenValidUntil,
-  });
-
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully logged in an user!',
-    data: { accessToken: session.accessToken },
-  });
 };
