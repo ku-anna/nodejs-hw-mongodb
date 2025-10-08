@@ -6,6 +6,11 @@ import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import { SessionsCollection } from '../models/session.js';
 import { UsersCollection } from '../models/user.js';
 
+import jwt from 'jsonwebtoken';
+import { SMTP } from '../constants/index.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
+import { sendEmail } from '../utils/sendMail.js';
+
 export const registerUser = async (payload) => {
   const existing = await UsersCollection.findOne({ email: payload.email });
   if (existing) throw createHttpError(409, 'Email in use');
@@ -82,5 +87,30 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
   return await SessionsCollection.create({
     userId: session.userId,
     ...newSession,
+  });
+};
+
+//pwd reset
+export const requestResetToken = async (email) => {
+  const user = await UsersCollection.findOne({ email });
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+  const resetToken = jwt.sign(
+    {
+      sub: user._id,
+      email,
+    },
+    getEnvVar('JWT_SECRET'),
+    {
+      expiresIn: '15m',
+    },
+  );
+
+  await sendEmail({
+    from: getEnvVar(SMTP.SMTP_FROM),
+    to: email,
+    subject: 'Reset your password',
+    html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
   });
 };
