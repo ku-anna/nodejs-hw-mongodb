@@ -8,6 +8,7 @@ import { ONE_DAY } from '../constants/index.js';
 import { requestResetToken } from '../services/auth.js';
 
 import createHttpError from 'http-errors';
+import { resetPassword } from '../services/auth.js';
 
 //user reg
 export const registerUserController = async (req, res) => {
@@ -88,15 +89,8 @@ export const refreshUserSessionController = async (req, res) => {
     },
   });
 };
+
 //pwd reset email
-// export const requestResetEmailController = async (req, res) => {
-//   await requestResetToken(req.body.email);
-//   res.json({
-//     message: 'Reset password email was successfully sent!',
-//     status: 200,
-//     data: {},
-//   });
-// };
 export const requestResetEmailController = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -128,4 +122,13 @@ export const requestResetEmailController = async (req, res, next) => {
 
     next(error);
   }
+};
+//pwd reset
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
+  });
 };
