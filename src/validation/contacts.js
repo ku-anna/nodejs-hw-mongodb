@@ -43,7 +43,7 @@ export const updateContactSchema = Joi.object({
     .pattern(/^\+?[0-9]{10,15}$/)
     .min(3)
     .max(20),
-  email: Joi.string().email().min(3).max(20),
+  email: Joi.string().email().min(3).max(30),
   isFavourite: Joi.boolean(),
   contactType: Joi.string().valid('home', 'personal', 'work').min(3).max(20),
 }).min(1);
