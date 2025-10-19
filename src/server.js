@@ -12,6 +12,7 @@ import authRouter from './routers/auth.js';
 import { getEnvVar } from './utils/getEnvVar.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 const PORT = Number(getEnvVar('PORT', '3000'));
 
@@ -45,7 +46,7 @@ export const startServer = () => {
 
   app.use('/auth', authRouter);
   app.use('/contacts', contactsRouter);
-
+  app.use('/api-docs', swaggerDocs());
   app.use(notFoundHandler);
   app.use(errorHandler);
 
