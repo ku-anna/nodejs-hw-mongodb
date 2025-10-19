@@ -31,7 +31,7 @@
         ],
         "summary": "Get list of contacts",
         "operationId": "getContacts",
-        "description": "Get list of contacts with pagination and filters",
+        "description": "Get list of contacts with pagination, filtering and sorting.",
         "security": [
           {
             "bearerAuth": []
@@ -42,9 +42,9 @@
             "in": "query",
             "name": "page",
             "schema": {
-              "type": "integer"
-            },
-            "example": 1
+              "type": "integer",
+              "example": 1
+            }
           },
           {
             "in": "query",
@@ -59,13 +59,13 @@
             "name": "favorite",
             "schema": {
               "type": "boolean",
-              "example": false
+              "example": true
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully retrieved contacts list",
+            "description": "Successfully found contacts",
             "content": {
               "application/json": {
                 "schema": {
@@ -127,15 +127,16 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Create a new contact",
+        "summary": "Create contact",
         "operationId": "createContact",
-        "description": "Create a contact with request body data",
+        "description": "Create a new contact",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -148,15 +149,15 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "example": "John Doe"
+                    "example": "Jane Doe"
                   },
                   "email": {
                     "type": "string",
-                    "example": "john.doe@example.com"
+                    "example": "jane.doe@example.com"
                   },
                   "phone": {
                     "type": "string",
-                    "example": "+380991234567"
+                    "example": "+380991112233"
                   },
                   "favorite": {
                     "type": "boolean",
@@ -169,11 +170,16 @@
         },
         "responses": {
           "201": {
-            "description": "Contact created successfully",
+            "description": "Successfully created a contact",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -181,7 +187,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully created a contact!"
+                      "example": "Contact created successfully!"
                     },
                     "data": {
                       "$ref": "#/components/schemas/contacts"
@@ -254,9 +260,9 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Update contact by ID",
+        "summary": "Update contact by id",
         "operationId": "updateContact",
-        "description": "Update specific contact fields by ID",
+        "description": "Update existing contact fields",
         "security": [
           {
             "bearerAuth": []
@@ -274,6 +280,7 @@
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -281,11 +288,11 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "example": "Jane Doe"
+                    "example": "John Updated"
                   },
                   "phone": {
                     "type": "string",
-                    "example": "+380981234567"
+                    "example": "+380991234999"
                   },
                   "favorite": {
                     "type": "boolean",
@@ -303,6 +310,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -329,9 +341,9 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Delete contact by ID",
+        "summary": "Delete contact by id",
         "operationId": "deleteContact",
-        "description": "Delete a contact from the database by its ID",
+        "description": "Remove a contact from the database by id",
         "security": [
           {
             "bearerAuth": []
@@ -355,6 +367,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",

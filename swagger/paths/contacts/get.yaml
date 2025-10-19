@@ -2,7 +2,7 @@ tags:
   - Contacts
 summary: Get list of contacts
 operationId: getContacts
-description: 'Get list of contacts with pagination and filters'
+description: Get list of contacts with pagination, filtering and sorting.
 security:
   - bearerAuth: []
 parameters:
@@ -10,7 +10,7 @@ parameters:
     name: page
     schema:
       type: integer
-    example: 1
+      example: 1
   - in: query
     name: limit
     schema:
@@ -20,18 +20,15 @@ parameters:
     name: favorite
     schema:
       type: boolean
-      example: false
+      example: true
 responses:
   '200':
-    description: Successfully retrieved contacts list
+    description: Successfully found contacts
     content:
       application/json:
         schema:
           type: object
-          required:
-            - status
-            - message
-            - data
+          required: [status, message, data]
           properties:
             status:
               type: integer
@@ -41,11 +38,7 @@ responses:
               example: Successfully found contacts!
             data:
               type: object
-              required:
-                - contacts
-                - page
-                - limit
-                - totalPages
+              required: [contacts, page, limit, totalPages]
               properties:
                 contacts:
                   type: array

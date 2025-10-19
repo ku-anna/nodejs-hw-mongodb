@@ -1,8 +1,8 @@
 tags:
   - Contacts
-summary: Update contact by ID
+summary: Update contact by id
 operationId: updateContact
-description: 'Update specific contact fields by ID'
+description: Update existing contact fields
 security:
   - bearerAuth: []
 parameters:
@@ -13,6 +13,7 @@ parameters:
       type: string
       example: '65f7a21ef5a2b30012c54d8b'
 requestBody:
+  required: true
   content:
     application/json:
       schema:
@@ -20,10 +21,10 @@ requestBody:
         properties:
           name:
             type: string
-            example: 'Jane Doe'
+            example: 'John Updated'
           phone:
             type: string
-            example: '+380981234567'
+            example: '+380991234999'
           favorite:
             type: boolean
             example: true
@@ -34,6 +35,7 @@ responses:
       application/json:
         schema:
           type: object
+          required: [status, message, data]
           properties:
             status:
               type: integer

@@ -1,8 +1,8 @@
 tags:
   - Contacts
-summary: Delete contact by ID
+summary: Delete contact by id
 operationId: deleteContact
-description: 'Delete a contact from the database by its ID'
+description: Remove a contact from the database by id
 security:
   - bearerAuth: []
 parameters:
@@ -19,6 +19,7 @@ responses:
       application/json:
         schema:
           type: object
+          required: [status, message]
           properties:
             status:
               type: integer
