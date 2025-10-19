@@ -34,6 +34,7 @@ export const startServer = () => {
     }),
   );
   app.use(cookieParser());
+
   app.use(
     pino({
       transport: { target: 'pino-pretty' },
@@ -44,10 +45,14 @@ export const startServer = () => {
     res.json({ status: 200, message: 'API up' });
   });
 
-  app.use('/auth', authRouter);
-  app.use('/contacts', contactsRouter);
   app.use('/api-docs', swaggerDocs());
+
+  app.use('/auth', authRouter);
+
+  app.use('/contacts', contactsRouter);
+
   app.use(notFoundHandler);
+
   app.use(errorHandler);
 
   app.listen(PORT, () => {

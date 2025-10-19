@@ -1,5 +1,6 @@
 // src/constants/index.js
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const SORT_ORDER = {
   ASC: 'asc',
@@ -29,3 +30,6 @@ export const CLOUDINARY = {
 };
 
 export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);

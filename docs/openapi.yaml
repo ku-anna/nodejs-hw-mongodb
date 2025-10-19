@@ -11,9 +11,22 @@ tags:
     description: Operations about contacts.
 servers:
   - url: http://localhost:3000
-  - url: https://example.com/api/v1
+  - url: https://nodejs-hw-mongodb-contacts-f7va.onrender.com
 
 paths:
+  /auth/register:
+    post:
+      $ref: ../swagger/paths/auth/register.yaml
+  /auth/login:
+    post:
+      $ref: ../swagger/paths/auth/login.yaml
+  /auth/refresh:
+    post:
+      $ref: ../swagger/paths/auth/refresh.yaml
+  /auth/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout.yaml
+
   /contacts:
     get:
       $ref: ../swagger/paths/contacts/get.yaml
@@ -32,3 +45,6 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
+
+security:
+  - bearerAuth: []
