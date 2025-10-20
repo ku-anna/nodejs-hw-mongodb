@@ -334,7 +334,7 @@
         ],
         "summary": "Get list of contacts",
         "operationId": "getContacts",
-        "description": "Get list of contacts with pagination, filtering and sorting.",
+        "description": "Get all user contacts with optional filtering and pagination",
         "security": [
           {
             "bearerAuth": []
@@ -347,7 +347,8 @@
             "schema": {
               "type": "integer",
               "example": 1
-            }
+            },
+            "description": "Page number (default 1)"
           },
           {
             "in": "query",
@@ -355,7 +356,8 @@
             "schema": {
               "type": "integer",
               "example": 10
-            }
+            },
+            "description": "Number of contacts per page (default 10)"
           },
           {
             "in": "query",
@@ -363,12 +365,13 @@
             "schema": {
               "type": "boolean",
               "example": true
-            }
+            },
+            "description": "Filter contacts by favorite flag (optional)"
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully found contacts",
+            "description": "Successfully found contacts!",
             "content": {
               "application/json": {
                 "schema": {
@@ -392,8 +395,11 @@
                       "required": [
                         "contacts",
                         "page",
-                        "limit",
-                        "totalPages"
+                        "perPage",
+                        "totalItems",
+                        "totalPages",
+                        "hasNextPage",
+                        "hasPreviousPage"
                       ],
                       "properties": {
                         "contacts": {
@@ -406,13 +412,25 @@
                           "type": "integer",
                           "example": 1
                         },
-                        "limit": {
+                        "perPage": {
                           "type": "integer",
                           "example": 10
                         },
+                        "totalItems": {
+                          "type": "integer",
+                          "example": 45
+                        },
                         "totalPages": {
                           "type": "integer",
-                          "example": 3
+                          "example": 5
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "hasPreviousPage": {
+                          "type": "boolean",
+                          "example": false
                         }
                       }
                     }
@@ -430,9 +448,9 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Create contact",
+        "summary": "Create a contact",
         "operationId": "createContact",
-        "description": "Create a new contact",
+        "description": "Create a new contact for the current user",
         "security": [
           {
             "bearerAuth": []
@@ -441,7 +459,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
@@ -452,15 +470,16 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "example": "Jane Doe"
+                    "example": "John Doe"
                   },
                   "email": {
                     "type": "string",
-                    "example": "jane.doe@example.com"
+                    "format": "email",
+                    "example": "johndoe@example.com"
                   },
                   "phone": {
                     "type": "string",
-                    "example": "+380991112233"
+                    "example": "+380931234567"
                   },
                   "favorite": {
                     "type": "boolean",
@@ -473,7 +492,7 @@
         },
         "responses": {
           "201": {
-            "description": "Successfully created a contact",
+            "description": "Successfully created a contact!",
             "content": {
               "application/json": {
                 "schema": {
@@ -490,7 +509,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Contact created successfully!"
+                      "example": "Successfully created a contact!"
                     },
                     "data": {
                       "$ref": "#/components/schemas/contacts"
@@ -565,7 +584,7 @@
         ],
         "summary": "Update contact by id",
         "operationId": "updateContact",
-        "description": "Update existing contact fields",
+        "description": "Update existing contact fields by ID",
         "security": [
           {
             "bearerAuth": []
@@ -578,24 +597,29 @@
             "required": true,
             "schema": {
               "type": "string",
-              "example": "65f7a21ef5a2b30012c54d8b"
+              "example": "6714b5d9e2a6a07f42b5e123"
             }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "name": {
                     "type": "string",
-                    "example": "John Updated"
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "johndoe@example.com"
                   },
                   "phone": {
                     "type": "string",
-                    "example": "+380991234999"
+                    "example": "+380991112233"
                   },
                   "favorite": {
                     "type": "boolean",
@@ -608,7 +632,7 @@
         },
         "responses": {
           "200": {
-            "description": "Contact updated successfully",
+            "description": "Successfully updated a contact!",
             "content": {
               "application/json": {
                 "schema": {
@@ -708,39 +732,37 @@
         "required": [
           "_id",
           "name",
+          "email",
           "phone",
-          "email"
+          "favorite"
         ],
         "properties": {
           "_id": {
-            "description": "Contact's ID",
             "type": "string",
-            "example": "65f7a21ef5a2b30012c54d8b"
+            "description": "Contact id",
+            "example": "6714b5d9e2a6a07f42b5e123"
           },
           "name": {
-            "description": "Contact's name",
             "type": "string",
             "example": "John Doe"
           },
           "email": {
-            "description": "Contact's email address",
             "type": "string",
+            "format": "email",
             "example": "john.doe@example.com"
           },
           "phone": {
-            "description": "Contact's phone number",
             "type": "string",
-            "example": "+380991234567"
+            "example": "+380931234567"
           },
           "favorite": {
-            "description": "Whether the contact is marked as favorite",
             "type": "boolean",
             "example": false
           },
           "owner": {
-            "description": "ID of the user who owns this contact",
             "type": "string",
-            "example": "65f7a21ef5a2b30012c54d8b"
+            "description": "User id who owns the contact",
+            "example": "6714b5d9e2a6a07f42b5e101"
           }
         }
       }

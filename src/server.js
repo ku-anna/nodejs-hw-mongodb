@@ -45,11 +45,11 @@ export const startServer = () => {
     res.json({ status: 200, message: 'API up' });
   });
 
-  app.use('/api-docs', swaggerDocs());
-
   app.use('/auth', authRouter);
 
   app.use('/contacts', contactsRouter);
+
+  app.use('/api-docs', swaggerDocs());
 
   app.use(notFoundHandler);
 

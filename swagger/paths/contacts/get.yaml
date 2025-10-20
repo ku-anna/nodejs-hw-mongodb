@@ -2,7 +2,7 @@ tags:
   - Contacts
 summary: Get list of contacts
 operationId: getContacts
-description: Get list of contacts with pagination, filtering and sorting.
+description: Get all user contacts with optional filtering and pagination
 security:
   - bearerAuth: []
 parameters:
@@ -11,24 +11,30 @@ parameters:
     schema:
       type: integer
       example: 1
+    description: Page number (default 1)
   - in: query
     name: limit
     schema:
       type: integer
       example: 10
+    description: Number of contacts per page (default 10)
   - in: query
     name: favorite
     schema:
       type: boolean
       example: true
+    description: Filter contacts by favorite flag (optional)
 responses:
   '200':
-    description: Successfully found contacts
+    description: Successfully found contacts!
     content:
       application/json:
         schema:
           type: object
-          required: [status, message, data]
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
@@ -38,7 +44,14 @@ responses:
               example: Successfully found contacts!
             data:
               type: object
-              required: [contacts, page, limit, totalPages]
+              required:
+                - contacts
+                - page
+                - perPage
+                - totalItems
+                - totalPages
+                - hasNextPage
+                - hasPreviousPage
               properties:
                 contacts:
                   type: array
@@ -47,11 +60,20 @@ responses:
                 page:
                   type: integer
                   example: 1
-                limit:
+                perPage:
                   type: integer
                   example: 10
+                totalItems:
+                  type: integer
+                  example: 45
                 totalPages:
                   type: integer
-                  example: 3
+                  example: 5
+                hasNextPage:
+                  type: boolean
+                  example: true
+                hasPreviousPage:
+                  type: boolean
+                  example: false
   '401':
     $ref: '../../components/responses/401.yaml'

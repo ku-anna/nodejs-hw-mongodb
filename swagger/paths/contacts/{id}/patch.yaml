@@ -2,7 +2,7 @@ tags:
   - Contacts
 summary: Update contact by id
 operationId: updateContact
-description: Update existing contact fields
+description: Update existing contact fields by ID
 security:
   - bearerAuth: []
 parameters:
@@ -11,31 +11,38 @@ parameters:
     required: true
     schema:
       type: string
-      example: '65f7a21ef5a2b30012c54d8b'
+      example: '6714b5d9e2a6a07f42b5e123'
 requestBody:
   required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         properties:
           name:
             type: string
-            example: 'John Updated'
+            example: 'John Doe'
+          email:
+            type: string
+            format: email
+            example: 'johndoe@example.com'
           phone:
             type: string
-            example: '+380991234999'
+            example: '+380991112233'
           favorite:
             type: boolean
             example: true
 responses:
   '200':
-    description: Contact updated successfully
+    description: Successfully updated a contact!
     content:
       application/json:
         schema:
           type: object
-          required: [status, message, data]
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
