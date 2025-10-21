@@ -2,28 +2,61 @@ type: object
 required:
   - _id
   - name
-  - email
-  - phone
-  - favorite
+  - phoneNumber
+  - contactType
+  - isFavourite
+  - userId
 properties:
   _id:
+    description: 'Unique contact ID'
     type: string
-    description: Contact id
-    example: 6714b5d9e2a6a07f42b5e123
+    example: '6714b5d9e2a6a07f42b5e101'
+
   name:
+    description: 'Full name of the contact'
     type: string
-    example: John Doe
-  email:
-    type: string
-    format: email
-    example: john.doe@example.com
-  phone:
+    example: 'John Doe'
+
+  phoneNumber:
+    description: 'Contact phone number'
     type: string
     example: '+380931234567'
-  favorite:
-    type: boolean
-    example: false
-  owner:
+
+  contactType:
+    description: 'Type of contact'
     type: string
-    description: User id who owns the contact
-    example: 6714b5d9e2a6a07f42b5e101
+    enum: ['personal', 'business', 'other']
+    example: 'business'
+
+  isFavourite:
+    description: 'Whether the contact is marked as favourite'
+    type: boolean
+    example: true
+
+  email:
+    description: 'Email address of the contact (optional)'
+    type: string
+    format: email
+    example: 'kubareva.ann@gmail.com'
+
+  photo:
+    description: "URL to the contact's photo"
+    type: string
+    example: 'https://res.cloudinary.com/demo/image/upload/contact-photo.png'
+
+  userId:
+    description: 'ID of the user who owns this contact'
+    type: string
+    example: '670a7c8f56a7f15d39c102a9'
+
+  createdAt:
+    description: 'Date when the contact was created'
+    type: string
+    format: date-time
+    example: '2025-10-20T18:25:43.511Z'
+
+  updatedAt:
+    description: 'Date when the contact was last updated'
+    type: string
+    format: date-time
+    example: '2025-10-21T08:14:12.900Z'
