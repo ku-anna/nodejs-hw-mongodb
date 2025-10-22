@@ -5,94 +5,56 @@ operationId: getContacts
 description: Get all user contacts with filtering, sorting, and pagination
 security:
   - bearerAuth: []
+
 parameters:
   - in: query
     name: page
     schema:
       type: integer
       example: 1
-    description: Page number (default 1)
+    description: Page number for pagination
+
   - in: query
     name: perPage
     schema:
       type: integer
       example: 10
-    description: Number of contacts per page (default 10)
-  - in: query
-    name: sortOrder
-    schema:
-      type: string
-      enum: ['asc', 'desc']
-      example: 'asc'
-    description: Sort order (ascending or descending)
+    description: Number of contacts per page
+
   - in: query
     name: sortBy
     schema:
       type: string
-      example: '_id'
-    description: Field to sort contacts by
+      example: name
+    description: Field to sort by
+
   - in: query
-    name: type
+    name: sortOrder
     schema:
       type: string
-      example: 'personal'
-    description: Filter contacts by type (e.g., personal, business)
+      enum: [asc, desc]
+      example: asc
+    description: Sorting order
+
   - in: query
     name: isFavourite
     schema:
       type: boolean
       example: true
-    description: Filter contacts by favourite flag
+    description: Filter by favourite status
+  - in: query
+
+    name: contactType
+    schema:
+      type: string
+      enum: [work, home, personal]
+      example: work
+    description: Filter by contact type
+
 responses:
   '200':
-    description: Successfully found contacts!
-    content:
-      application/json:
-        schema:
-          type: object
-          required:
-            - status
-            - message
-            - data
-          properties:
-            status:
-              type: integer
-              example: 200
-            message:
-              type: string
-              example: Successfully found contacts!
-            data:
-              type: object
-              required:
-                - data
-                - page
-                - perPage
-                - totalItems
-                - totalPages
-                - hasPreviousPage
-                - hasNextPage
-              properties:
-                data:
-                  type: array
-                  items:
-                    $ref: '../../components/schemas/contacts.yaml'
-                page:
-                  type: integer
-                  example: 1
-                perPage:
-                  type: integer
-                  example: 10
-                totalItems:
-                  type: integer
-                  example: 45
-                totalPages:
-                  type: integer
-                  example: 5
-                hasPreviousPage:
-                  type: boolean
-                  example: false
-                hasNextPage:
-                  type: boolean
-                  example: true
+    $ref: '../../components/responses/204.yaml'
   '401':
     $ref: '../../components/responses/401.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'

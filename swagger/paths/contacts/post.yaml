@@ -25,35 +25,10 @@ requestBody:
           contactType:
             type: string
             example: 'personal'
-          email:
-            type: string
-            example: 'john@example.com'
-          isFavourite:
-            type: boolean
-            example: false
-          photo:
-            type: string
-            format: binary
+
 responses:
   '201':
-    description: Contact created successfully
-    content:
-      application/json:
-        schema:
-          type: object
-          required:
-            - status
-            - message
-            - data
-          properties:
-            status:
-              type: integer
-              example: 201
-            message:
-              type: string
-              example: Contact created successfully
-            data:
-              $ref: '../../components/schemas/contacts.yaml'
+    $ref: '../../components/responses/204.yaml'
   '404':
     $ref: '../../components/responses/404.yaml'
   '401':

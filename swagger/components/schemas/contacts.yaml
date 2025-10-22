@@ -4,59 +4,58 @@ required:
   - name
   - phoneNumber
   - contactType
-  - isFavourite
   - userId
 properties:
   _id:
-    description: 'Unique contact ID'
+    description: 'Unique identifier for the contact'
     type: string
     example: '6714b5d9e2a6a07f42b5e101'
 
   name:
     description: 'Full name of the contact'
     type: string
-    example: 'John Doe'
+    example: 'Anna Kubareva'
 
   phoneNumber:
-    description: 'Contact phone number'
+    description: 'Primary phone number of the contact'
     type: string
     example: '+380931234567'
 
-  contactType:
-    description: 'Type of contact'
-    type: string
-    enum: ['personal', 'business', 'other']
-    example: 'business'
-
-  isFavourite:
-    description: 'Whether the contact is marked as favourite'
-    type: boolean
-    example: true
-
   email:
-    description: 'Email address of the contact (optional)'
+    description: 'Email address of the contact'
     type: string
     format: email
     example: 'kubareva.ann@gmail.com'
 
-  photo:
-    description: "URL to the contact's photo"
+  isFavourite:
+    description: 'Indicates whether the contact is marked as favourite'
+    type: boolean
+    example: false
+
+  contactType:
+    description: 'Type of the contact'
     type: string
-    example: 'https://res.cloudinary.com/demo/image/upload/contact-photo.png'
+    enum: ['home', 'personal', 'work']
+    example: 'personal'
 
   userId:
     description: 'ID of the user who owns this contact'
     type: string
     example: '670a7c8f56a7f15d39c102a9'
 
+  photo:
+    description: "URL to the contact's photo (local upload or Cloudinary)"
+    type: string
+    example: 'https://res.cloudinary.com/demo/image/upload/v12345/photo.png'
+
   createdAt:
-    description: 'Date when the contact was created'
+    description: 'Timestamp when the contact was created'
     type: string
     format: date-time
-    example: '2025-10-20T18:25:43.511Z'
+    example: '2025-10-22T18:25:43.511Z'
 
   updatedAt:
-    description: 'Date when the contact was last updated'
+    description: 'Timestamp when the contact was last updated'
     type: string
     format: date-time
-    example: '2025-10-21T08:14:12.900Z'
+    example: '2025-10-22T18:45:12.511Z'
