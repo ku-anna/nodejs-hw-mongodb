@@ -2,9 +2,10 @@ tags:
   - Contacts
 summary: Create a new contact
 operationId: createContact
-description: Create a new contact with optional photo upload
+description: Create a new contact for the current user
 security:
   - bearerAuth: []
+
 requestBody:
   required: true
   content:
@@ -18,18 +19,67 @@ requestBody:
         properties:
           name:
             type: string
+            description: "Contact's name"
             example: 'John Doe'
           phoneNumber:
             type: string
-            example: '+380991112233'
+            description: "Contact's phone number"
+            example: '+380931234567'
+          email:
+            type: string
+            format: email
+            description: "Contact's email address"
+            example: 'john.doe@example.com'
           contactType:
             type: string
+            description: 'Type of contact'
+            enum: [home, personal, work]
             example: 'personal'
+          isFavourite:
+            type: boolean
+            description: 'Mark contact as favourite'
+            example: false
+          photo:
+            type: string
+            format: binary
+            description: 'Optional contact photo'
 
 responses:
   '201':
-    $ref: '../../components/responses/204.yaml'
-  '404':
-    $ref: '../../components/responses/404.yaml'
+    description: Successfully created contact!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Contact created successfully
+            data:
+              type: object
+              $ref: '../../components/schemas/contacts.yaml'
+  '400':
+    description: Bad request (missing required fields)
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: 'Missing required fields'
+            data:
+              type: object
+              example: {}
   '401':
     $ref: '../../components/responses/401.yaml'

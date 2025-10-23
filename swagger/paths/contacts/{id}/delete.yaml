@@ -14,7 +14,7 @@ parameters:
       example: '6714b5d9e2a6a07f42b5e101'
 responses:
   '204':
-    $ref: '../../../components/responses/204.yaml'
+    $ref: '../../../components/responses/204-delete.yaml'
   '401':
     $ref: '../../../components/responses/401.yaml'
   '404':

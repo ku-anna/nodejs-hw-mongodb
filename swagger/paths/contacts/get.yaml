@@ -25,7 +25,7 @@ parameters:
     name: sortBy
     schema:
       type: string
-      example: name
+      example: '_id'
     description: Field to sort by
 
   - in: query
@@ -34,26 +34,75 @@ parameters:
       type: string
       enum: [asc, desc]
       example: asc
-    description: Sorting order
+    description: Sorting order (ascending or descending)
+
+  - in: query
+    name: type
+    schema:
+      type: string
+      enum: [home, personal, work]
+      example: work
+    description: Filter contacts by contact type
 
   - in: query
     name: isFavourite
     schema:
       type: boolean
       example: true
-    description: Filter by favourite status
-  - in: query
-
-    name: contactType
-    schema:
-      type: string
-      enum: [work, home, personal]
-      example: work
-    description: Filter by contact type
+    description: Filter contacts by favourite flag
 
 responses:
   '200':
-    $ref: '../../components/responses/204.yaml'
+    description: Successfully found contacts!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found contacts!
+            data:
+              type: object
+              required:
+                - data
+                - page
+                - perPage
+                - totalItems
+                - totalPages
+                - hasPreviousPage
+                - hasNextPage
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../../components/schemas/contacts.yaml'
+                page:
+                  type: integer
+                  example: 1
+                perPage:
+                  type: integer
+                  example: 10
+                totalItems:
+                  type: integer
+                  example: 42
+                totalPages:
+                  type: integer
+                  example: 5
+                hasPreviousPage:
+                  type: boolean
+                  example: false
+                hasNextPage:
+                  type: boolean
+                  example: true
+
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':
